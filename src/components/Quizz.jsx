@@ -83,13 +83,16 @@ export default function Quizz() {
     },
   ];
 
+  const total = 7;
+
   const navigate = useNavigate();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [totalCorrect, setTotalCorrect] = useState(0);
-  const [totalIncorrect, setTotalIncorrect] = useState(0);
+  const [correct, setCorrect] = useState(0);
+  const [incorrect, setIncorrect] = useState(0);
+  const [skip, setSkip] = useState(0);
 
   const handleOptionClick = (index) => {
     setSelectedOption(index);
@@ -103,15 +106,19 @@ export default function Quizz() {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        navigate("/result", { state: { totalCorrect, totalIncorrect } });
+        navigate("/result", {
+          state: { correct, incorrect, skip, total },
+        });
       }
     } else {
       if (selectedOption !== null) {
         if (selectedOption === questions[currentQuestion].correctAnswerIndex) {
-          setTotalCorrect((prev) => prev + 1);
+          setCorrect((prev) => prev + 1);
         } else {
-          setTotalIncorrect((prev) => prev + 1);
+          setIncorrect((prev) => prev + 1);
         }
+      } else {
+        setSkip((prev) => prev + 1);
       }
       setIsSubmitted(true);
     }
