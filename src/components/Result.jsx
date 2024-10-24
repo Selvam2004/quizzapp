@@ -16,22 +16,27 @@ export default function Result() {
         <h1 className="text-2xl font-bold text-center text-blue-600 mb-4">
           Quiz Results
         </h1>
-        <div className="text-lg text-gray-700 mb-6">
-          <p className="mb-2">
-            <strong>Total Questions:</strong> {totalQuestions}
+        
+        <div className="text-lg text-gray-700 mb-6  ">
+          <p className="text-center mb-4 font-bold text-3xl">
+            {correctPercentage}%
           </p>
-          <p className="mb-2">
-            <strong>Total Correct:</strong> {totalCorrect}
-          </p>
-          <p className="mb-2">
-            <strong>Total Incorrect:</strong> {totalIncorrect}
-          </p>
-          <p className="mb-2">
-            <strong>Total Skipped:</strong> {totalSkipped}
-          </p>
-          <p className="mb-2">
-            <strong>Correct Percentage:</strong> {correctPercentage}%
-          </p>
+          <div className="flex justify-between mb-2 border-b">
+            <span>Questions:</span>
+            <span>{totalQuestions}</span>
+          </div>
+          <div className="flex justify-between mb-2 border-b">
+            <span>Correct:</span>
+            <span>{totalCorrect}</span>
+          </div>
+          <div className="flex justify-between mb-2 border-b">
+            <span>Incorrect:</span>
+            <span>{totalIncorrect}</span>
+          </div>
+          <div className="flex justify-between mb-2 border-b">
+            <span>Skipped:</span>
+            <span>{totalSkipped}</span>
+          </div>
         </div>
 
         <button

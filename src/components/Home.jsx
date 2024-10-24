@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Navbar from "./NavBar";
 import {
   BrowserRouter as Router,
@@ -26,18 +25,13 @@ function Home() {
 }
 
 function Greet() {
-  const navigate = useNavigate();
-  const [timerMode, setTimerMode] = useState(false);
-
-  const toggleTimerMode = () => {
-    setTimerMode((prevMode) => !prevMode); // Toggle timer mode
-  };
+  const navigate = useNavigate(); 
 
   return (
     <>
       <div className="bg-blue-50 flex items-center justify-center min-h-screen">
         <div className="text-center p-10 bg-white rounded-lg shadow-xl max-w-lg animate-fadeInUp">
-          {/* Greeting Icon */}
+           
           <div className="flex items-center justify-center mb-6">
             <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center animate-bounce">
               <svg
@@ -54,35 +48,13 @@ function Greet() {
                 ></path>
               </svg>
             </div>
-          </div>
-
-          {/* Title and Description */}
+          </div> 
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
             Welcome to the Quiz!
           </h1>
           <p className="text-lg text-gray-600 mb-4">
             Choose your quiz mode to get started.
-          </p>
-
-          {/* Timer Toggle
-          <div className="flex justify-center items-center space-x-4 mb-6">
-            <span className="text-lg font-medium text-gray-600">
-              {timerMode ? "Timer On" : "Timer Off"}
-            </span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={timerMode}
-                onChange={toggleTimerMode} // Toggle the timer state
-              />
-              <div className="w-16 h-8 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full peer-checked:from-blue-500 peer-checked:to-blue-700 peer-checked:ring-2 peer-checked:ring-blue-400 transition-all duration-300 ease-in-out relative">
-                <span className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md peer-checked:translate-x-full transform transition-all duration-300 ease-in-out peer-checked:scale-110 peer-hover:scale-105"></span>
-              </div>
-            </label>
-          </div> */}
-
-          {/* Start Button */}
+          </p> 
           <button
             onClick={() => navigate("/quizz")}
             className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-6 py-3 transition transform hover:scale-105 active:scale-95 duration-200 ease-in-out"
@@ -90,9 +62,7 @@ function Greet() {
             Start Quiz
           </button>
         </div>
-      </div>
-
-      {/* Animations with TailwindCSS */}
+      </div> 
       <style jsx>{`
         @keyframes fadeInUp {
           from {
