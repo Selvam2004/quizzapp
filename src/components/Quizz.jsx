@@ -28,6 +28,7 @@ export default function Quizz() {
         handleNextClick();
       }      
     }
+    // eslint-disable-next-line
   }, [timeRemaining]);
 
   const handleOptionClick = (index) => {
