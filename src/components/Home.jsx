@@ -11,7 +11,7 @@ function Home(){
         
         <Routes>
           <Route path="/" element={<Greet />} />
-          {/* <Route path="/quiz" element={<Quizz />} />
+          {/* <Route path="/quiz" element={<Quizz data={} />} />
           <Route path="/result" element={<Result />} /> */}
         </Routes>
       </div>
