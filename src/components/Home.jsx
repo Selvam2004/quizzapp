@@ -1,6 +1,11 @@
 import { useState } from "react";
 import Navbar from "./NavBar";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import Quizz from "./Quizz";
 import Results from "./Result";
 
@@ -12,7 +17,7 @@ function Home() {
 
         <Routes>
           <Route path="/" element={<Greet />} />
-          <Route path="/quiz" element={<Quizz />} />
+          <Route path="/quizz" element={<Quizz />} />
           <Route path="/result" element={<Results />} />
         </Routes>
       </div>
@@ -21,6 +26,7 @@ function Home() {
 }
 
 function Greet() {
+  const navigate = useNavigate();
   const [timerMode, setTimerMode] = useState(false);
 
   const toggleTimerMode = () => {
@@ -77,7 +83,10 @@ function Greet() {
           </div> */}
 
           {/* Start Button */}
-          <button className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-6 py-3 transition transform hover:scale-105 active:scale-95 duration-200 ease-in-out">
+          <button
+            onClick={() => navigate("/quizz")}
+            className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-6 py-3 transition transform hover:scale-105 active:scale-95 duration-200 ease-in-out"
+          >
             Start Quiz
           </button>
         </div>
