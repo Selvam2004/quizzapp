@@ -1,41 +1,46 @@
-const Results = ({ score, total, results, restartQuiz }) => {
-  const percentage = ((score / total) * 100).toFixed(2);
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+export default function Result() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { totalCorrect, totalIncorrect, totalSkipped, totalQuestions } =
+    location.state;
+
+  const correctPercentage = ((totalCorrect / totalQuestions) * 100).toFixed(2);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-96">
-        <h2 className="text-4xl font-semibold mb-4 text-center"> 75 %</h2>
-        <table className="w-full">
-          <tbody>
-            <tr className="border-b">
-              <td className="py-2">Correct:</td>
-              <td className="py-2 text-right">10 /15 {total}</td>
-            </tr>
-            <tr className="border-b">
-              <td className="py-2">Incorrect:</td>
-              <td className="py-2 text-right">2/15</td>
-            </tr>
-            <tr className="border-b">
-              <td className="py-2">Skipped:</td>
-              <td className="py-2 text-right">3/15</td>
-            </tr>
-            <tr>
-              <td className="py-2 font-bold">Total Score:</td>
-              <td className="py-2 text-right font-bold">
-                {score} 10/15 {total}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center text-blue-600 mb-4">
+          Quiz Results
+        </h1>
+        <div className="text-lg text-gray-700 mb-6">
+          <p className="mb-2">
+            <strong>Total Questions:</strong> {totalQuestions}
+          </p>
+          <p className="mb-2">
+            <strong>Total Correct:</strong> {totalCorrect}
+          </p>
+          <p className="mb-2">
+            <strong>Total Incorrect:</strong> {totalIncorrect}
+          </p>
+          <p className="mb-2">
+            <strong>Total Skipped:</strong> {totalSkipped}
+          </p>
+          <p className="mb-2">
+            <strong>Correct Percentage:</strong> {correctPercentage}%
+          </p>
+        </div>
+
+        <button
+          onClick={() => navigate("/")}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+        >
+          Restart Quiz
+        </button>
       </div>
-      <button
-        onClick={restartQuiz}
-        className="mt-4 px-6 py-3 text-white bg-blue-500 rounded hover:bg-blue-600"
-      >
-        Restart Quiz
-      </button>
     </div>
   );
-};
-
-export default Results;
+}
