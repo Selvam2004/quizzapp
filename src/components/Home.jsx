@@ -7,7 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import Quizz from "./Quizz";
-import Results from "./Result";
+import Result from "./Result";
 
 function Home() {
   return (
@@ -18,7 +18,7 @@ function Home() {
         <Routes>
           <Route path="/" element={<Greet />} />
           <Route path="/quizz" element={<Quizz />} />
-          <Route path="/result" element={<Results />} />
+          <Route path="/result" element={<Result />} />
         </Routes>
       </div>
     </Router>
