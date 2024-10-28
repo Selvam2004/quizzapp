@@ -55,9 +55,31 @@ function Greet() {
             Welcome to the Quiz!
           </h1>
           <p className="text-lg text-gray-600 mb-4">
-            Number of Question: {data.length}<br/>
-            Time for each Question: 60s 
-          </p> 
+            <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
+              <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+                Quiz Instructions
+              </h2>
+              <ul class="list-disc list-inside space-y-2 text-gray-600 text-left">
+                <li>
+                  <span class="font-medium text-gray-700">
+                    Number of Questions:
+                  </span>{" "}
+                  7
+                </li>
+                <li>
+                  <span class="font-medium text-gray-700">
+                    Time for Each Question:
+                  </span>{" "}
+                  60 seconds
+                </li>
+                <li>
+                  <span class="font-medium text-gray-700">Important:</span> Once
+                  you submit an answer, you cannot return to the question.
+                  Please review your choice before proceeding.
+                </li>
+              </ul>
+            </div>
+          </p>
           <button
             onClick={() => navigate("/quizz")}
             className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-6 py-3 transition transform hover:scale-105 active:scale-95 duration-200 ease-in-out"

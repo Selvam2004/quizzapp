@@ -157,7 +157,7 @@ export default function Quizz() {
             disabled={isSubmitted}
             className="mt-6 w-50 me-3 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           >
-            Save & Next
+            Reveal & Continue
           </button>
         </div>
       </div>
