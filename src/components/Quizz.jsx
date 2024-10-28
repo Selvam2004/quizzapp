@@ -18,6 +18,7 @@ export default function Quizz() {
   const [totalSkipped, setTotalSkipped] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(totalTime);
   const [errormsg, setErrormsg] = useState("");
+  const [quizComplete, setQuizComplete] = useState(false);
 
   useEffect(() => {
     if (timeRemaining > 0) {
@@ -40,8 +41,16 @@ export default function Quizz() {
 
   useEffect(() => {
     localStorage.setItem("currentQuestion", currentQuestion);
-    // eslint-disable-next-line
   }, [currentQuestion]);
+ 
+  useEffect(() => {
+    if (quizComplete) {
+      navigate("/result", {
+        state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
+      });
+    }
+    // eslint-disable-next-line
+  }, [quizComplete]);
 
   const handleOptionClick = (index) => {
     setSelectedOption(index);
@@ -58,9 +67,7 @@ export default function Quizz() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      navigate("/result", {
-        state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
-      });
+      setQuizComplete(true);  // Mark quiz as complete
     }
   };
 
@@ -91,9 +98,7 @@ export default function Quizz() {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        navigate("/result", {
-          state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
-        });
+        setQuizComplete(true);  // Mark quiz as complete
       }
     }, 2000); 
   };
