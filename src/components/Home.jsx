@@ -64,7 +64,7 @@ function Greet() {
                   <span class="font-medium text-gray-700">
                     Number of Questions:
                   </span>{" "}
-                  7
+                  {data.length}
                 </li>
                 <li>
                   <span class="font-medium text-gray-700">
