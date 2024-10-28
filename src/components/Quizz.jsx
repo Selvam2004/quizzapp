@@ -2,45 +2,92 @@ import React, { useState, useEffect } from "react";
 import QuizzCard from "./Quizzcard";
 import { useNavigate } from "react-router-dom";
 import data from '../data/questions.json';
+
 export default function Quizz() {
-  const questions=data;
+  const questions = data;
   const totalQuestions = questions.length;
-  const totalTime = 60;  
+  const totalTime = parseInt(localStorage.getItem("remainingTime")) || 60;  
+  const savedQuestionIndex = parseInt(localStorage.getItem("currentQuestion")) || 0;
   const navigate = useNavigate();
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(savedQuestionIndex);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [totalCorrect, setTotalCorrect] = useState(0);
   const [totalIncorrect, setTotalIncorrect] = useState(0);
   const [totalSkipped, setTotalSkipped] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(totalTime);
+  const [errormsg, setErrormsg] = useState("");
 
   useEffect(() => {
     if (timeRemaining > 0) {
       const timerId = setInterval(() => {
-        setTimeRemaining((prev) => prev - 1);
+        setTimeRemaining((prevTime) => {
+          let updatedTime = prevTime - 1;
+          localStorage.setItem("remainingTime", updatedTime);
+          return updatedTime;
+        });
       }, 1000);
 
       return () => clearInterval(timerId);
-    } else {   
-      if(!isSubmitted){
+    } else { 
+      if (!isSubmitted) {
         handleNextClick();
       }      
     }
     // eslint-disable-next-line
   }, [timeRemaining]);
 
+  useEffect(() => {
+    localStorage.setItem("currentQuestion", currentQuestion);
+    // eslint-disable-next-line
+  }, [currentQuestion]);
+
   const handleOptionClick = (index) => {
     setSelectedOption(index);
   };
 
-  const handleNextClick = () => {
-    if (isSubmitted) {
+  const handleSkip = () => {
+    setTotalSkipped((prev) => prev + 1);
+    setErrormsg("");
+    setSelectedOption(null);
+    setIsSubmitted(false);
+    setTimeRemaining(60); 
+    localStorage.setItem("remainingTime", 60);
+    
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      navigate("/result", {
+        state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
+      });
+    }
+  };
+
+  const handleNextClick = () => { 
+    if (selectedOption === null) { 
+      setErrormsg("Please choose the option");
+      return;
+    } else {
+      setErrormsg("");
+    }
+
+    setIsSubmitted(true);  
+    setTimeRemaining(0);
+    localStorage.setItem("remainingTime", 0); 
+
+    if (selectedOption === questions[currentQuestion].correctAnswerIndex) {
+      setTotalCorrect((prev) => prev + 1);
+    } else {
+      setTotalIncorrect((prev) => prev + 1);
+    }
+      
+    setTimeout(() => {
       setSelectedOption(null);
       setIsSubmitted(false);
       setTimeRemaining(60); 
-
+      localStorage.setItem("remainingTime", 60);
+    
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
@@ -48,19 +95,7 @@ export default function Quizz() {
           state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
         });
       }
-    } else {
-      setTimeRemaining(0);
-      if (selectedOption !== null) {
-        if (selectedOption === questions[currentQuestion].correctAnswerIndex) {
-          setTotalCorrect((prev) => prev + 1);
-        } else {
-          setTotalIncorrect((prev) => prev + 1);
-        }
-      } else {
-        setTotalSkipped((prev) => prev + 1);
-      }
-      setIsSubmitted(true);
-    }
+    }, 2000); 
   };
 
   return (
@@ -79,13 +114,23 @@ export default function Quizz() {
           handleOptionClick={handleOptionClick}
           isSubmitted={isSubmitted}
         />
-
-        <button
-          onClick={handleNextClick}
-          className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
-        >
-          {isSubmitted ? "Next" : "Submit"}
-        </button>
+        <p className="text-red-400">{errormsg}</p>
+        <div className="text-right">
+          <button
+            onClick={handleSkip}
+            disabled={isSubmitted}
+            className="mt-6 w-50 me-5 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          >
+            Skip
+          </button>
+          <button
+            onClick={handleNextClick}
+            disabled={isSubmitted}
+            className="mt-6 w-50 me-3 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          >
+            Save & Next
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -26,8 +26,9 @@ function Home() {
 
 function Greet() {
   const navigate = useNavigate(); 
-
+  localStorage.setItem("currentQuestion", 0);
   return (
+    
     <>
       <div className="bg-blue-50 flex items-center justify-center min-h-screen">
         <div className="text-center p-10 bg-white rounded-lg shadow-xl max-w-lg animate-fadeInUp">
@@ -53,7 +54,8 @@ function Greet() {
             Welcome to the Quiz!
           </h1>
           <p className="text-lg text-gray-600 mb-4">
-            Choose your quiz mode to get started.
+            Number of Question: 7<br/>
+            Time for each Question: 60s 
           </p> 
           <button
             onClick={() => navigate("/quizz")}

@@ -7,7 +7,8 @@ export default function QuizzCard({
   correctAnswerIndex,
   handleOptionClick,
   isSubmitted,
-}) {
+}) 
+{ 
   return (
     <div>
       <h2 className="text-xl font-semibold text-gray-700 mb-4">{question}</h2>
