@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Quizz from "./Quizz";
 import Result from "./Result";
+import data from '../data/questions.json';
 
 function Home() {
   return (
@@ -54,7 +55,7 @@ function Greet() {
             Welcome to the Quiz!
           </h1>
           <p className="text-lg text-gray-600 mb-4">
-            Number of Question: 7<br/>
+            Number of Question: {data.length}<br/>
             Time for each Question: 60s 
           </p> 
           <button
