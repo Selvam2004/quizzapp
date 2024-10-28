@@ -11,15 +11,14 @@ export default function Quizz() {
   const navigate = useNavigate();
 
   const [currentQuestion, setCurrentQuestion] = useState(savedQuestionIndex);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState([]);  
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [totalCorrect, setTotalCorrect] = useState(0);
   const [totalIncorrect, setTotalIncorrect] = useState(0);
   const [totalSkipped, setTotalSkipped] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(totalTime);
   const [errormsg, setErrormsg] = useState("");
-  const [quizComplete, setQuizComplete] = useState(false);
-
+  const [quizComplete, setQuizComplete] = useState(false); 
   useEffect(() => {
     if (timeRemaining > 0) {
       const timerId = setInterval(() => {
@@ -33,14 +32,15 @@ export default function Quizz() {
       return () => clearInterval(timerId);
     } else { 
       if (!isSubmitted) {
-        handleNextClick();
+        handleSkip();
       }      
     }
-    // eslint-disable-next-line
+     // eslint-disable-next-line
   }, [timeRemaining]);
 
   useEffect(() => {
     localStorage.setItem("currentQuestion", currentQuestion);
+    // eslint-disable-next-line
   }, [currentQuestion]);
  
   useEffect(() => {
@@ -49,17 +49,31 @@ export default function Quizz() {
         state: { totalCorrect, totalIncorrect, totalSkipped, totalQuestions },
       });
     }
-    // eslint-disable-next-line
+     // eslint-disable-next-line
   }, [quizComplete]);
 
   const handleOptionClick = (index) => {
-    setSelectedOption(index);
+    const currentQuestionData = questions[currentQuestion];
+  
+    if (currentQuestionData.type === "single") { 
+      setSelectedOptions([index]); 
+    } else { 
+      setSelectedOptions((prev) => {
+        if (prev.length>0 && prev.includes(index)) {
+          return prev.filter((option) => option !== index);  
+        } else {
+          return [...prev, index];  
+        }
+      });
+    }
   };
+  
+  
 
   const handleSkip = () => {
     setTotalSkipped((prev) => prev + 1);
     setErrormsg("");
-    setSelectedOption(null);
+    setSelectedOptions([]);
     setIsSubmitted(false);
     setTimeRemaining(60); 
     localStorage.setItem("remainingTime", 60);
@@ -72,8 +86,8 @@ export default function Quizz() {
   };
 
   const handleNextClick = () => { 
-    if (selectedOption === null) { 
-      setErrormsg("Please choose the option");
+    if (selectedOptions.length === 0) { 
+      setErrormsg("Please choose at least one option");
       return;
     } else {
       setErrormsg("");
@@ -83,14 +97,22 @@ export default function Quizz() {
     setTimeRemaining(0);
     localStorage.setItem("remainingTime", 0); 
 
-    if (selectedOption === questions[currentQuestion].correctAnswerIndex) {
+    const correctAnswers = questions[currentQuestion].correctAnswerIndex; 
+    let isCorrect;
+    //let isIncorrect;
+    if(correctAnswers){
+       isCorrect = selectedOptions.every(option => correctAnswers.includes(option));
+       //isIncorrect = selectedOptions.some(option => !correctAnswers.includes(option));
+    }
+
+    if (isCorrect) {
       setTotalCorrect((prev) => prev + 1);
     } else {
       setTotalIncorrect((prev) => prev + 1);
     }
-      
-    setTimeout(() => {
-      setSelectedOption(null);
+
+    const tmp=setTimeout(() => {
+      setSelectedOptions([]);
       setIsSubmitted(false);
       setTimeRemaining(60); 
       localStorage.setItem("remainingTime", 60);
@@ -98,9 +120,10 @@ export default function Quizz() {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        setQuizComplete(true);  // Mark quiz as complete
+        setQuizComplete(true);   
       }
-    }, 2000); 
+    }, 2000);
+    return ()=>clearTimeout(tmp);
   };
 
   return (
@@ -114,10 +137,11 @@ export default function Quizz() {
         <QuizzCard
           question={questions[currentQuestion].text}
           answers={questions[currentQuestion].answers}
-          correctAnswerIndex={questions[currentQuestion].correctAnswerIndex}
-          selectedOption={selectedOption}
+          correctAnswerIndexes={questions[currentQuestion].correctAnswerIndex} 
+          selectedOptions={selectedOptions}
           handleOptionClick={handleOptionClick}
           isSubmitted={isSubmitted}
+          type={questions[currentQuestion].type}
         />
         <p className="text-red-400">{errormsg}</p>
         <div className="text-right">
